@@ -1,4 +1,4 @@
-const FAVICON_DATA_URL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACyUlEQVR4nO2Za2vUQBSG+1MU/KJ4Qc0m2V0r1WKV1mKlKCoURUVRCipKoSiKFYqiohS2dnvbXu3eL/2DxwQaqcsm805K8oKdD++33ZnzPExmzjB9R44ek8OcPnYB7BgB7ALYMQLYBbBjBLALYMcIYBfAjhHALoAdI4BdADtGALsAdmILyBd2JD+/Jbn5Dcn9KnlZkdzCouSKC5ItFiS7OOfl54ELzGw99vJQMtv3xdqeEOv3PS93xNq5JVZ5XJzyTcmVxwgCAPjs0ndxl74eUIAavr98I30BKLy7/NnLbHwBAPxAZZQgQAPeXfkUu0AEfrBynSEAh3dXP4qz+j6eAAB+qDJCEKAJ75TexhSghh+uDhMEaMI7pWlx1qb0BQDwo9Vr6QvQWfYBvL32Ruz1V3oCAPix6lWCAM1lH8Db6y+05kHgx2tDDAHYsv8rYA/e3pgUe/M5PA8Cf7t2hSAgxjcfwGc2n8LzIPB3a4PpC0Dg/WX/j4A9+KC9ReZB4CfqlwkCAPheG153b6+aB4F/UL/EEKCGD9vw9re3qnkQ+Ef1AYIAAN7/5nv9t7u9jZoHgX/SuEgQAMBH7fbdHV7Y7xD4Z43+9AUg8FG7PXqfR+AnGxcIAgB4f8OLHAO40iLwL5t5hgA1PHLUqa60CPzrZpYgAID3d3vVOKpbHQI/1XTTF4DAI+e8n6iLDQI/3XQIAgB45JwPEnaxQeDftWyGADW8f9Sh44X19gj8h5ZFEADAq5qc7vTq7RH4mdZ5ggAA3j/ndcbs1d4i8LPtc+kLQOCjOrywoN/8fvgv7bMEAQm+2OjCf2ufYQhI7sVGF/5H5zRBQMIvNjrwc51T6QtI+sVGB77QOUkQkPCLjR8Uvrh7giEg2RebIAj88u7x9AX8LzEC2AWwYwSwC2DHCGAXwI4RwC6AHSOAXQA7RgC7AHaMAHYB7Bx6AX8AbYDV9k/vnXwAAAAASUVORK5CYII=';
+const FAVICON_DATA_URL = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjYyIj4KICA8cmVjdCBmaWxsPSIjZmZmZmZmIiB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI2MiIgcng9IjY0Ii8+CiAgPHBhdGggZmlsbD0iIzQyODVGNCIgZD0iTTI1NS44NiAxMzMuNWMwLTguOS0uNzgtMTcuNi0yLjI1LTI2SDEzMHY0OS4yaDcwLjVjLTMgMTYtMTIuMSAyOS41LTI1LjkgMzguNnYzMi4yaDQxLjljMjQuNS0yMi41IDM4LjQtNTUuOSAzOC40LTk0eiIvPgogIDxwYXRoIGZpbGw9IiMzNEE4NTMiIGQ9Ik0xMzAgMjYwYzM1IDAgNjQuNC0xMS42IDg1LjktMzEuNWwtNDEuOS0zMi4yYy0xMS43IDcuOS0yNi42IDEyLjUtNDQgMTIuNS0zMy44IDAtNjIuNS0yMi44LTcyLjgtNTMuNkgxMy40djMzLjZDMzQuNyAyMzAgNzguMiAyNjAgMTMwIDI2MHoiLz4KICA8cGF0aCBmaWxsPSIjRkJCQzA1IiBkPSJNNTcuMiAxNTUuMmMtMi42LTcuOS00LTE2LjMtNC0yNS4yczEuNC0xNy4zIDQtMjUuMlY3MS4ySDEzLjRDNS41IDg2LjYgMSAxMDQuMyAxIDEyMi44czQuNSAzNi4yIDEyLjQgNTEuNmw0My44LTMzLjJ6Ii8+CiAgPHBhdGggZmlsbD0iI0VBNDMzNSIgZD0iTTEzMCA1MS42YzE4LjkgMCAzNS44IDYuNSA0OS4xIDE5LjRsMzYuNy0zNi43QzE5NC4zIDEyLjYgMTY1IDEgMTMwIDEgNzguMiAxIDM0LjcgMzEgMTMuNCA3MS4ybDQzLjggMzMuNmMxMC4zLTMwLjggMzktNTMuNiA3Mi44LTUzLjZ6Ii8+Cjwvc3ZnPg==';
 
 function doGet(e) {
   const page = e && e.parameter && e.parameter.page ? e.parameter.page : '';
@@ -378,6 +378,7 @@ function getChatData() {
       spaceCount: spaceMessages.length,
       directMessages: directMessages,
       spaces: spaceMessages,
+      conversations: combined,
       latestConversation: combined[0] || null,
       dataSource: response.source
     };
@@ -393,6 +394,7 @@ function getChatData() {
       spaceCount: spaceMessages.length,
       directMessages: [],
       spaces: [],
+      conversations: [],
       latestConversation: null,
       error: error.toString()
     };
