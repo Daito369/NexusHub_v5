@@ -326,16 +326,75 @@ function fetchUnreadChatThreads(limit) {
     }
   }
 
-  try {
-    const fallbackThreads = GmailApp.search('in:chats is:unread', 0, maxResults);
-    return {
-      source: 'gmailApp',
-      threads: fallbackThreads
-    };
-  } catch (error) {
-    Logger.log('GmailApp fallback for chat fetch failed: ' + error.toString());
-    throw error;
+  const queries = [
+    'label:^im label:^im_unread',
+    'label:^im label:unread',
+    'in:chats is:unread',
+    'label:チャット is:unread'
+  ];
+
+  const aggregatedThreads = [];
+  const seenThreadIds = {};
+  const warnings = [];
+
+  queries.forEach(function(query) {
+    if (aggregatedThreads.length >= maxResults) {
+      return;
+    }
+
+    try {
+      const results = GmailApp.search(query, 0, maxResults);
+      if (results && results.length) {
+        results.some(function(thread) {
+          if (!thread) {
+            return false;
+          }
+          const threadId = thread.getId();
+          if (seenThreadIds[threadId]) {
+            return false;
+          }
+          seenThreadIds[threadId] = true;
+          aggregatedThreads.push(thread);
+          return aggregatedThreads.length >= maxResults;
+        });
+      }
+    } catch (searchError) {
+      warnings.push({ query: query, message: searchError.toString() });
+      Logger.log('GmailApp chat search failed for query "' + query + '": ' + searchError.toString());
+    }
+  });
+
+  if (aggregatedThreads.length < maxResults) {
+    try {
+      const chatLabel = GmailApp.getUserLabelByName('チャット');
+      if (chatLabel) {
+        const labelThreads = chatLabel.getThreads(0, maxResults);
+        if (labelThreads && labelThreads.length) {
+          labelThreads.some(function(thread) {
+            if (!thread) {
+              return false;
+            }
+            const threadId = thread.getId();
+            if (seenThreadIds[threadId]) {
+              return false;
+            }
+            seenThreadIds[threadId] = true;
+            aggregatedThreads.push(thread);
+            return aggregatedThreads.length >= maxResults;
+          });
+        }
+      }
+    } catch (labelError) {
+      warnings.push({ query: 'label:チャット', message: labelError.toString() });
+      Logger.log('Chat label fallback failed: ' + labelError.toString());
+    }
   }
+
+  return {
+    source: 'gmailApp',
+    threads: aggregatedThreads,
+    warnings: warnings
+  };
 }
 
 function getChatData() {
@@ -345,6 +404,7 @@ function getChatData() {
   try {
     const response = fetchUnreadChatThreads(60);
     const threads = response.threads || [];
+    const warningDetails = response.warnings || [];
 
     threads.forEach(function(thread) {
       let parsed = null;
@@ -370,10 +430,13 @@ function getChatData() {
     spaceMessages.sort(function(a, b) { return b.lastUpdated - a.lastUpdated; });
     const combined = directMessages.concat(spaceMessages).sort(function(a, b) { return b.lastUpdated - a.lastUpdated; });
 
+    const derivedCount = directMessages.length + spaceMessages.length;
+    const totalUnread = derivedCount > 0 ? derivedCount : threads.length;
+
     return {
       success: true,
-      totalUnread: directMessages.length + spaceMessages.length,
-      unreadCount: directMessages.length + spaceMessages.length,
+      totalUnread: totalUnread,
+      unreadCount: totalUnread,
       directCount: directMessages.length,
       spaceCount: spaceMessages.length,
       directMessages: directMessages,
@@ -381,7 +444,9 @@ function getChatData() {
       conversations: combined,
       latestConversation: combined[0] || null,
       dataSource: response.source,
-      fetchedAt: new Date().toISOString()
+      fetchedAt: new Date().toISOString(),
+      threadCount: threads.length,
+      warnings: warningDetails
     };
 
   } catch (error) {
