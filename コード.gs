@@ -1,4 +1,4 @@
-const FAVICON_DATA_URL = 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%0A%20%20%3Ccircle%20fill%3D%22%23FFFFFF%22%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2232%22/%3E%0A%20%20%3Cpath%20fill%3D%22%234285F4%22%20d%3D%22M32%2011c6.5%200%2011.4%202.3%2015%205.8l5.8-5.8C46.6%206.3%2040%204%2032%204%2018.7%204%207.5%2014.5%207.5%2028S18.7%2052%2032%2052c11.6%200%2021.1-7.5%2023.5-18.1H32v-8.6h22.9c.2%201.1.4%202.4.4%203.7%200%2015.3-10.3%2026.5-23.3%2026.5-13.4%200-24.3-10.9-24.3-24.5S18.6%2011%2032%2011z%22/%3E%0A%20%20%3Cpath%20fill%3D%22%2334A853%22%20d%3D%22M32%2060c10.9%200%2020.1-3.6%2026.5-10.4l-7.8-7.6c-4.6%203.3-10.3%205.2-16.9%205.2-12.9%200-23.8-8.8-27.5-20.7H6.8v8.6C11.1%2048.9%2020.6%2060%2032%2060z%22/%3E%0A%20%20%3Cpath%20fill%3D%22%23FBBC05%22%20d%3D%22M11.3%2026.5c-.7-2-.9-4.1-.9-6.3s.3-4.3.9-6.3V5.3H6.8C3%2011.5%201%2018.6%201%2025.7s2%2014.2%205.8%2020.4l8.5-6.6c-2-4.2-3-8.7-3-13z%22/%3E%0A%20%20%3Cpath%20fill%3D%22%23EA4335%22%20d%3D%22M32%2012.3c4.6%200%208.4%201.5%2011.4%204.3l8.1-8C47.9%203.5%2040.7%201%2032%201%2020.6%201%2011.1%207.1%206.8%2016.9l8.5%206.3C18.9%2016%2024.7%2012.3%2032%2012.3z%22/%3E%0A%3C/svg%3E';
+const FAVICON_DATA_URL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACyUlEQVR4nO2Za2vUQBSG+1MU/KJ4Qc0m2V0r1WKV1mKlKCoURUVRCipKoSiKFYqiohS2dnvbXu3eL/2DxwQaqcsm805K8oKdD++33ZnzPExmzjB9R44ek8OcPnYB7BgB7ALYMQLYBbBjBLALYMcIYBfAjhHALoAdI4BdADtGALsAdmILyBd2JD+/Jbn5Dcn9KnlZkdzCouSKC5ItFiS7OOfl54ELzGw99vJQMtv3xdqeEOv3PS93xNq5JVZ5XJzyTcmVxwgCAPjs0ndxl74eUIAavr98I30BKLy7/NnLbHwBAPxAZZQgQAPeXfkUu0AEfrBynSEAh3dXP4qz+j6eAAB+qDJCEKAJ75TexhSghh+uDhMEaMI7pWlx1qb0BQDwo9Vr6QvQWfYBvL32Ruz1V3oCAPix6lWCAM1lH8Db6y+05kHgx2tDDAHYsv8rYA/e3pgUe/M5PA8Cf7t2hSAgxjcfwGc2n8LzIPB3a4PpC0Dg/WX/j4A9+KC9ReZB4CfqlwkCAPheG153b6+aB4F/UL/EEKCGD9vw9re3qnkQ+Ef1AYIAAN7/5nv9t7u9jZoHgX/SuEgQAMBH7fbdHV7Y7xD4Z43+9AUg8FG7PXqfR+AnGxcIAgB4f8OLHAO40iLwL5t5hgA1PHLUqa60CPzrZpYgAID3d3vVOKpbHQI/1XTTF4DAI+e8n6iLDQI/3XQIAgB45JwPEnaxQeDftWyGADW8f9Sh44X19gj8h5ZFEADAq5qc7vTq7RH4mdZ5ggAA3j/ndcbs1d4i8LPtc+kLQOCjOrywoN/8fvgv7bMEAQm+2OjCf2ufYQhI7sVGF/5H5zRBQMIvNjrwc51T6QtI+sVGB77QOUkQkPCLjR8Uvrh7giEg2RebIAj88u7x9AX8LzEC2AWwYwSwC2DHCGAXwI4RwC6AHSOAXQA7RgC7AHaMAHYB7Bx6AX8AbYDV9k/vnXwAAAAASUVORK5CYII=';
 
 function doGet(e) {
   const page = e && e.parameter && e.parameter.page ? e.parameter.page : '';
@@ -378,10 +378,8 @@ function getChatData() {
       spaceCount: spaceMessages.length,
       directMessages: directMessages,
       spaces: spaceMessages,
-      conversations: combined,
       latestConversation: combined[0] || null,
-      dataSource: response.source,
-      fetchedAt: new Date().toISOString()
+      dataSource: response.source
     };
 
   } catch (error) {
@@ -395,7 +393,6 @@ function getChatData() {
       spaceCount: spaceMessages.length,
       directMessages: [],
       spaces: [],
-      conversations: [],
       latestConversation: null,
       error: error.toString()
     };
